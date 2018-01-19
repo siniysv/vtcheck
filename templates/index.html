@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+<head>
+  <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='w3.css') }}">
+  <title>VT Check</title>
+</head>
+<body>
+  <script type=text/javascript>
+    $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+  </script>
+  <script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/FileSaver.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/notify.js') }}"></script>
+
+  <div class="w3-container w3-hide" id="nav_bar">
+    <div class="w3-display-container" style="height:50px;">
+      <div class="w3-display-middle">
+      <div class="w3-bar">
+        <a href="#tasks" class="w3-button w3-black">All tasks</a>
+        <a href="#newtask" class="w3-button w3-black">New task</a>
+      </div>
+    </div>
+    </div>
+  </div>
+  <div class="w3-container" id="task_bar">
+    <div class="w3-display-container" style="height:50px;">
+      <div class="w3-display-middle">
+      <div class="w3-bar">
+        <div id="short_report" class="w3-button w3-black">Short Report</div>
+        <div id="full_report" class="w3-button w3-black">Full Report</div>
+        <div id="report_by_engine" class="w3-button w3-black">Report by Engine</div>
+      </div>
+      </div>
+    </div>
+  </div>
+  <div id="task_list" class="w3-container">
+    <table class="w3-table w3-striped task_table" id="task_list_table">
+      <tr>
+        <th>Task ID</th>
+        <th>Added by</th>
+        <th>Added</th>
+        <th>Hashes checked</th>
+        <th>Remove</th>
+      </tr>
+    </table>
+  </div>
+  <div id="new_task" class="w3-container w3-hide">
+  	<form id="api_hashes_form">
+      <input class="w3-input" type="text" placeholder="API Key" name="api_key_input">
+      <textarea class="w3-input" id="hashes" rows="5" placeholder="Paste hashes here" id="hashes_paste_input"></textarea>
+    </form>
+  	<div class="w3-button w3-black" id="submit_form">Run</div>
+  </div>
+  <div id="task_details" class="w3-container">
+  	<!-- <div> -->
+      <table class="w3-table w3-striped task_table" id="task_details_table">
+        <tr>
+          <th>Task ID</th>
+          <th>Added by</th>
+          <th>Added</th>
+          <th>Hashes checked</th>
+          <th>Stop/Remove</th>
+        </tr>
+      </table>
+  	<!-- </div> -->
+    <div class="w3-light-grey">
+      <div class="w3-container w3-green w3-center w3-hide" id="progressbar" style="width:25%">25%</div>
+    </div>
+    <table class="w3-table w3-striped entries_table" id="entry_properties_table">
+      <tr>
+        <th>Resource</th>
+        <th>Hashes</th>
+        <th>Rate</th>
+        <th>Scan Date</th>
+        <th>Recheck</th>
+        <th>VT Link</th>
+      </tr>
+    </table>
+  </div>
+  <div id="entry_details" class="w3-container w3-hide">
+    <div>
+      <table class="w3-table w3-striped task_table" id="entry_task_details_table">
+        <tr>
+          <th>Task ID</th>
+          <th>Added by</th>
+          <th>Added</th>
+          <th>Hashes checked</th>
+          <th>Stop/Remove</th>
+        </tr>
+      </table>
+    </div>
+    <div>
+      <table class="w3-table w3-striped entries_table" id="entry_details_table">
+        <tr>
+          <th>Resource</th>
+          <th>Hashes</th>
+          <th>Rate</th>
+          <th>Scan Date</th>
+          <th>Recheck</th>
+          <th>VT Link</th>
+        </tr>
+      </table>
+  	</div>
+    <div>
+      <table class="w3-table w3-striped result_table" id="engine_details_table">
+        <tr>
+          <th>*</th>
+          <th>AV Engine</th>
+          <th>AV Version</th>
+          <th>Updated</th>
+          <th>Malware</th>
+        </tr>
+      </table>
+  	</div>
+  </div>
+</body>

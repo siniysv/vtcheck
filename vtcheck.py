@@ -8,11 +8,9 @@ import threading
 
 from flask import render_template, redirect, url_for, jsonify, request
 
-from vt_api import get_task, get_tasks, add_task, get_task_results 
+from vt_api import get_task, get_tasks, add_task, get_task_results
 from vt_api import get_result, remove_task, remove_task_results
 from vt_api import VTReportByHash
-
-counter = 0
 
 status_queue = queue.Queue()
 
@@ -102,11 +100,8 @@ def process_data(request):
                     error = 'Cannot run new thread, maximum %s reached (current %s)' %(
                         str(running_threads_max),
                         str(running_threads_num))
-
-
     response['task_id'] = task_id
     response['error'] = error
-
     return response
 
 @app.route('/')
@@ -122,11 +117,6 @@ def get_post_data():
     response = process_data(request)
     return jsonify(response)
 
-@app.route('/test_key', methods = ['POST'])
-def test_key():
-    response = test_key(request)
-    return jsonify(response)
-
 @app.route('/task<string:task_id>', methods = ['GET'])
 def task(task_id):
     running_task_ids = get_running_threads()
@@ -138,14 +128,12 @@ def task(task_id):
 @app.route('/taskresults<string:task_id>', methods = ['GET'])
 def taskresults(task_id):
     response = []
-
     result_list, error = get_task_results(task_id);
     for result_id in result_list:
         result, error = get_result(result_id)
         response.append(result)
     response = {'id': task_id, 'response': response, 'error': error}
     return jsonify(response)
-
 
 @app.route('/taskcancel<string:task_id>', methods = ['GET'])
 def taskcancel(task_id):
@@ -204,11 +192,8 @@ def tasks():
 def fullreport(task_id):
     task_dict, error = get_task(task_id)
     result_list, error = get_task_results(task_id)
-
     scan_list = set()
-
     rows_dict = {}
-
     for result_id in result_list:
         result, error = get_result(result_id)
         try:
@@ -216,9 +201,6 @@ def fullreport(task_id):
                 scan_list.add(scan)
         except KeyError:
             pass
-    # print(scan_list)
-
-
     for result_id in result_list:
         result, error = get_result(result_id)
         row_dict = {}
@@ -230,12 +212,8 @@ def fullreport(task_id):
                 row_dict[scan] = scan_result
             except KeyError:
                 row_dict[scan] = 'not_scanned'
-            # print(scan)
-            # print(row_dict[scan])
         rows_dict[result_id] = row_dict
-
     scan_list = sorted(list(scan_list))
-    # print(scan_list)
     response = {'task': task_dict, 'rows': rows_dict, 'columns': scan_list}
     return jsonify(response)
 
